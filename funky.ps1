@@ -1,4 +1,4 @@
-function Get-Funky ([Parameter(Mandatory=$true)][string]$Text, [int]$Iteration, [switch]$Matrix, [switch]$Colorize, [switch]$About) {
+function Get-Funky ([Parameter(Mandatory=$true)][string]$Text,[int]$Iteration,[switch]$Matrix,[switch]$Colorize,[switch]$About) {
     <#
         .DESCRIPTION
         Get funkadelic with this kickass tool!
@@ -71,11 +71,9 @@ function Get-Funky ([Parameter(Mandatory=$true)][string]$Text, [int]$Iteration, 
     }
     If ($About -eq $True) {
         Write-Host "`r`n"
-        Write-Host "`r`n"
         Write-Host "Code written by US Army Signal students"
         Write-Host "Code available at https://github.com/prettydiff/powershell"
         Write-Host "`r`n"
     }
-    Export-ModuleMember -function * -Alias *
 }
 New-Alias -Name funkit -Value Get-Funky -Description "Just go funkit" -Force
