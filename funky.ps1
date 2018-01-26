@@ -1,4 +1,33 @@
-function Get-Funky ([Parameter(Mandatory=$true)][string]$Text, [int]$Iteration, [switch]$Colorize, [switch]$Matrix, [switch]$About) {
+function Get-Funky ([Parameter(Mandatory=$true)][string]$Text, [int]$Iteration, [switch]$Matrix, [switch]$Colorize, [switch]$About) {
+    <#
+        .DESCRIPTION
+        Get funkadelic with this kickass tool!
+
+        .PARAMETER Text
+        This mandatory parameter takes either a string or instructions to execute if wrapped in curly braces.
+
+        .PARAMETER Iteration
+        Takes an integer to determine how many times to print output to the console. Defaults to 1.
+
+        .PARAMETER Matrix
+        Colors the output similar to green console text as seen in the film The Matrix. This parameter takes precidence over Colorize.
+
+        .PARAMETER Colorize
+        Rainbow colors upon the output. Parameter Matrix takes precidence over this parameter.
+
+        .PARAMETER About
+        Brief information about this module.
+
+        .EXAMPLE
+        Get-Funky -Text "hello" -Colorize -Iteration 100
+        Get-Funky -Text {ps | ConvertToCSV} -Matrix -About
+
+        .LINK
+        https://github.com/prettydiff/powershell
+
+        .NOTES
+        https://github.com/prettydiff/powershell
+    #>
     [string]$script = $Text -replace "^\{" -replace "\}$"
     [string]$textchars = If ($Text[0] -eq "{" -and $Text[$Text.length - 1] -eq "}") {Invoke-Expression $script} Else {$Text}
     [string[]]$colors = [string]"Black",[string]"DarkBlue",[string]"DarkGreen",[string]"DarkCyan",[string]"DarkRed",[string]"DarkMagenta",[string]"DarkYellow",[string]"Gray",[string]"DarkGray",[string]"Blue",[string]"Green",[string]"Cyan",[string]"Red",[string]"Magenta",[string]"Yellow",[string]"White"
@@ -44,7 +73,9 @@ function Get-Funky ([Parameter(Mandatory=$true)][string]$Text, [int]$Iteration, 
         Write-Host "`r`n"
         Write-Host "`r`n"
         Write-Host "Code written by US Army Signal students"
-        Write-Host "Code available at http://github.com/prettydiff/powershell"
+        Write-Host "Code available at https://github.com/prettydiff/powershell"
         Write-Host "`r`n"
     }
+    Export-ModuleMember -function * -Alias *
 }
+New-Alias -Name funkit -Value Get-Funky -Description "Just go funkit" -Force
