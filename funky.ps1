@@ -1,32 +1,43 @@
-function Get-Funky ([Parameter(Mandatory=$true)][string]$Text, [int]$Iteration, [switch]$Colorize) {
+function Get-Funky ([Parameter(Mandatory=$true)][string]$Text, [int]$Iteration, [switch]$Colorize, [switch]$Matrix) {
     [string]$script = $Text -replace "^\{" -replace "\}$"
     [string]$textchars = If ($Text[0] -eq "{" -and $Text[$Text.length - 1] -eq "}") {Invoke-Expression $script} Else {$Text}
-    [char[]]$list = $textchars.toCharArray()
     [string[]]$colors = [string]"Black",[string]"DarkBlue",[string]"DarkGreen",[string]"DarkCyan",[string]"DarkRed",[string]"DarkMagenta",[string]"DarkYellow",[string]"Gray",[string]"DarkGray",[string]"Blue",[string]"Green",[string]"Cyan",[string]"Red",[string]"Magenta",[string]"Yellow",[string]"White"
-    [int]$len = $list.length
-    [int]$clen = $colors.length
-    [int]$a = 0
-    [int]$b = 0
-    [int]$c = Get-Random -Maximum ($clen - 1)
-    [int]$iter = If ($Iteration -lt 1) {1} Else {$Iteration}
-    if ($len -lt 1) {
-        return "The a string value is required for the -Text parameter."
-    }
-    if ($Colorize -eq $True) {
-        do {
+    function colorate {
+        [char[]]$list = $textchars.toCharArray()
+        [int]$len = $list.length
+        [int]$clen = $colors.length
+        [int]$a = 0
+        [int]$b = 0
+        [int]$c = Get-Random -Maximum ($clen - 1)
+        [int]$iter = If ($Iteration -lt 1) {1} Else {$Iteration}
+        Do {
             $b = 0
-            do {
+            Do {
+                If ($b % 64 -eq 0 -and $Matrix -eq $True) {
+                    $c = 1
+                }
                 Write-Host $list[$b] -ForeGroundColor $colors[$c] -NoNewLine
                 $b = $b + 1
-                $c = $c + 1
-                if ($c -eq $clen) {
+                If ($Matrix -eq $True) {
                     $c = 0
+                } Else {
+                    $c = $c + 1
+                    If ($c -eq $clen) {
+                        $c = 0
+                    }
                 }
-            } while ($b -lt $len)
+            } While ($b -lt $len)
             Write-Host "`r`n" -NoNewLine
             $a = $a + 1
-        } while ($a -lt $iter)
-    } else {
+        } While ($a -lt $iter)
+    }
+    If ($Matrix -eq $True) {
+        $colors = [string]"DarkGreen",[string]"Green"
+        $clen = $colors.length
+        colorate
+    } ElseIf ($Colorize -eq $True) {
+        colorate
+    } Else {
         Write-Host $textchars
     }
 }
